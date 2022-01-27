@@ -21,12 +21,12 @@ class MarathonTest {
 
     @DisplayName("마라톤 참가자 명단과 완주자 명단을 비교하여 완주 실패자 찾는 알고리즘 테스트")
     @ParameterizedTest
-    @MethodSource("stringArrayProvider")
+    @MethodSource("StringArrayProvider")
     void MarathonTest(String[] participant, String[] completion, String expected) {
         assertThat(marathon.solution(participant, completion)).isEqualTo(expected);
     }
     //문자열 배열을 매개변수로 넣고 싶을때는 MethodSource 사용
-    static Stream<Arguments> stringArrayProvider(){
+    static Stream<Arguments> StringArrayProvider(){
         return Stream.of(
             Arguments.of((Object) new String[]{"leo", "eden", "kiki"}, (Object) new String[]{"eden", "kiki"}, "leo")
         );
