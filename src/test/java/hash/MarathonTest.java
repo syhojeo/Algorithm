@@ -17,7 +17,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 
 class MarathonTest {
-
     Marathon marathon = new Marathon();
 
     @DisplayName("마라톤 참가자 명단과 완주자 명단을 비교하여 완주 실패자 찾는 알고리즘 테스트")
