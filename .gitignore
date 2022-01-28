@@ -3,3 +3,10 @@
 *.bin
 *.lock
 *.bin
+*.bin
+*.xml
+*.html
+*.html
+build
+.gradle
+/build/
