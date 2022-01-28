@@ -1,4 +1,4 @@
-/*문제 설명
+/*문제 설명 (프로그래머스 해시 2단계)
     전화번호부에 적힌 전화번호 중, 한 번호가 다른 번호의 접두어인 경우가 있는지 확인하려 합니다.
     전화번호가 다음과 같을 경우, 구조대 전화번호는 영석이의 전화번호의 접두사입니다.
 
@@ -64,8 +64,6 @@ public class PhoneBook {
         for(int i = 0; i < phoneBook.length; i++) {
             map.put(phoneBook[i], i);
         }
-
-
         for(int i = 0; i < phoneBook.length; i++) {
             for(int j = 0; j < phoneBook[i].length(); j++) {
                 if(map.containsKey(phoneBook[i].substring(0,j))) {
@@ -74,10 +72,6 @@ public class PhoneBook {
                 }
             }
         }
-
-
-
-
         return answer;
     }
 }
