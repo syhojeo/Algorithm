@@ -22,9 +22,9 @@ class BestAlbumTest {
 
     static Stream<Arguments> StringArrayProvider() {
         return Stream.of (
-            Arguments.of((Object) new String[] {"classic", "pop", "classic", "classic", "pop"},
+                Arguments.of((Object) new String[] {"classic", "pop", "classic", "classic", "pop"},
                         (Object)new int[] {500, 600, 150, 800, 2500},
-                            (Object) new int[] {4,1,3,0} )
+                        (Object) new int[] {4,1,3,0} )
         );
     }
 }

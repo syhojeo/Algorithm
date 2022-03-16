@@ -32,18 +32,31 @@
 package hash;
 
 /*
-    요구 사항 분석
-    1. 각 장르별 플레이 순위 구해서 순서대로 정렬
-    2. 정렬된 장르에 플레이곡 2순위까지 넣기
+    코드 구조 설계
+    1. 장르당 곡순위 정에서 정렬
+    2. 장르 순위정해서 정렬
+    3. 정렬된 장르 순위별 곡 2개씩 뽑아서 넣기
 
-    -> 해시맵에 (장르) : 총 플레이수
-    -> 해시맵을 탐색하며 장르별로 2개씩 정렬
+    map 구조
+    Map1<장르, Map2<고유번호 , 플레이 횟수>>
+    Map3<장르, 총 플레이 회수>
 
-    단, 플레이횟수가 같은경우 고유번호 비교하는 조건문과 장르에 곡이 2개가 아닐경우를 고려해서 짜야할것
+    1. Map2의 value 기준으로 고유번호 정렬 (TreeMap과 Comparator 를 이용)
+    2. Map3<장르, 총 플레이 회수> value 기준 정렬 (TreeMap과 Comparator를 이용)
+    불가능 -> treeMap으론 value 기준 정렬불가 이중맵에서 ArrayList의 sort를 이용해야 정렬가능
+    3. Map3의 장르를 Key값으로 삼아 Map2의 장르의 value를 호출하고 호출된 Map에서 가장 높은 2개의 고유번호 뽑아서
+    answer에 저장
+
+
+    TheeMap을 사용하여 value 기준 자동정렬과 오름차순이 아닌 내림차순 정렬을 통해서 정렬을 하는법을 공부할것
+
+    TreeMap value값 기준 내림차순 정렬
+
+    이중맵과 hashMap value 값기준 정렬 하는법
  */
 
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -53,81 +66,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+
 
 public class BestAlbum {
-
-    //time over
+    //TreeMap을 통해 이중Map 의 value 정렬하기
+    //["classic", "pop", "classic", "classic", "pop"]	[500, 600, 150, 800, 2500]	[4, 1, 3, 0]
     public int[] solution(String[] genres, int[] plays) {
-        //map을 저장하기 위해 Object형으로 value값을 저장
-        HashMap<String, Object> genresMap = new HashMap<String, Object>(); //<장르, 곡정보>
-        HashMap<String, Integer> playMap = new HashMap<String, Integer>(); // <장르, 총 장르 재생수>
-        ArrayList<Integer> resultAL = new ArrayList<Integer>();
-
-        //포문 돌려가며 HashMap 채우기
-        for (int i = 0; i <genres.length; i++) {
-            String key = genres[i];
-            HashMap<Integer, Integer> infoMap; //곡 정보 : <곡 고유 번호, 재생횟수>
-
-            //genresMap으로부터 get하기 위한 조건문 (genresMap에 key 값이 들어가 있는가?)
-            if (genresMap.containsKey(key)) {
-                //들어 있다면 genresMap안의 value(HashMap)값을 infoMap으로 가져온다
-                infoMap = (HashMap<Integer, Integer>) genresMap.get(key);
-            }
-            else { //들어 있지 않다면 infoMap의 값을 비어있는 해시맵으로 초기화
-                infoMap = new HashMap<Integer, Integer>(); //<곡정보, 재생횟수>
-            }
-
-            infoMap.put(i, plays[i]); //곡정보, 재생횟수 세팅
-            genresMap.put(key, infoMap); //장르, map 타입 세팅
-
-            //재생수
-            //안에 초기값이 있다면
-            if (playMap.containsKey(key)) {
-                playMap.put(key, playMap.get(key) + plays[i]);
-            }
-            else { //초기값이 없다면
-                playMap.put(key,plays[i]);
-            }
-        }
-
-        int mCnt = 0;
-        Iterator it = sortByValue(playMap).iterator();
-
-        while(it.hasNext()){
-            String key = (String)it.next();
-            Iterator indexIt = sortByValue((HashMap<Integer, Integer>)genresMap.get(key)).iterator();
-            int playsCnt = 0;
-
-            while(indexIt.hasNext()){
-                resultAL.add((int)indexIt.next());
-                mCnt++;
-                playsCnt++;
-                if(playsCnt > 1) break;
-            }
-        }
-
-        int[] answer = new int[resultAL.size()];
-
-        for(int i = 0; i < resultAL.size(); i++){
-            answer[i] = resultAL.get(i).intValue();
-        }
+        //1.Map1<장르, treeMap<플레이 횟수, 고유번호>> 정렬하기
+        int[] answer = {};
         return answer;
     }
-
-    private ArrayList sortByValue(final Map map) {
-        ArrayList<Object> keyList = new ArrayList();
-        keyList.addAll(map.keySet());
-
-        Collections.sort(keyList, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                Object v1 = map.get(o1);
-                Object v2 = map.get(o2);
-                return ((Comparable) v2).compareTo(v1);
-            }
-        });
-
-        return keyList;
-    }
-
 
 }
