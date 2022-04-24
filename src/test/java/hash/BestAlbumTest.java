@@ -20,11 +20,12 @@ class BestAlbumTest {
         assertThat(bestAlbum.solution(genres, plays)).isEqualTo(expected);
     }
 
-    static Stream<Arguments> StringArrayProvider() {
-        return Stream.of (
-                Arguments.of((Object) new String[] {"classic", "pop", "classic", "classic", "pop"},
-                        (Object)new int[] {500, 600, 150, 800, 2500},
-                        (Object) new int[] {4,1,3,0} )
+    static Stream<Arguments> StringArrayProvider() { //d b a c
+        return Stream.of (                          //0  1   2   3   4    5    6    7    8   9  10  11  12
+                Arguments.of((Object) new String[] {"c","a","b","a","a", "b", "b", "b", "b","c","c","c","d"},
+                        //                0   1  2   3    4    5   6   7  8 9 10 11  12
+                        (Object)new int[] {1,500,9, 600, 501, 800,500,300,2,2,1,2,100000},
+                        (Object) new int[] {12,5,6,3,4,9,11} )
 
         );
 

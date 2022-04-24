@@ -66,7 +66,7 @@ public class BestAlbum {
         int[] temp;
         int answerIndex = 0;
         Map<String, Map<Integer, Integer>> genresMap = new HashMap<>();
-        TreeMap<String, Integer> genresRank = new TreeMap<>();
+        Map<String, Integer> genresRank = new HashMap<>();
 
         //Task1. TreeMap2 만들어서 rankGenres에 넣기
         //Task2. TreeMap3 만들어서 장르랭크 만들기
@@ -94,10 +94,17 @@ public class BestAlbum {
             TreeMap<Integer, Integer> genresRank = new TreeMap<>(); -> O
          */
 
-        Set<String> keySet = genresRank.descendingKeySet();
-        Iterator<String> keyIterator = keySet.iterator();
-        while (keyIterator.hasNext()) {
-            String key = keyIterator.next();
+        //genresRank value값 기준 내림차순 정렬
+        List<Map.Entry<String, Integer>> genresRankList = new LinkedList<>(genresRank.entrySet());
+        genresRankList.sort(new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o2.getValue() - o1.getValue();
+            }
+        });
+
+        for (int i = 0; i < genresRankList.size(); i++) {
+            String key = genresRankList.get(i).getKey();
             //1등 장르의 <고유번호, 플레이횟수> Map을 가져오기
             Map<Integer, Integer> musicMap = genresMap.get(key);
 
@@ -142,8 +149,91 @@ public class BestAlbum {
 }
 
 
-/*genresRank 오름차순으로 졍렬해서 put하기
-answer 크기 정확히 세서 넣기
-(music play 횟수같을때는 어떻게 동작하는지 확인하지 못함)
-나머진 잘됨
-collection.sort, compare compareTo 확실히 공부할것*/
+/*
+다른사람 풀이 비교할것 나보다 2배빠름
+collection.sort, compare compareTo 확실히 공부하고 이해할것
+map으로 짜고 정렬을 위해 List를 쓰는게 과연 맞는 방법인가?
+처음부터 List를 map형식으로 만들고 정렬하는방법은 없는가?
+그렇다면 그게 전자의 방법보다 빠르고 좋은방법인가?
+*/
+
+ /*
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Collections;
+
+class Solution {
+    public int[] solution(String[] genres, int[] plays) {
+        HashMap<String, Object> genresMap = new HashMap<String, Object>();      //<장르, 곡 정보>
+        HashMap<String, Integer> playMap = new HashMap<String, Integer>(); //<장르, 총 장르 재생수>
+        ArrayList<Integer> resultAL = new ArrayList<Integer>();
+
+        for(int i = 0; i < genres.length; i++){
+            String key = genres[i];
+            HashMap<Integer, Integer> infoMap;       // 곡 정보 : <곡 고유번호, 재생횟수>
+
+            if(genresMap.containsKey(key)){
+                 infoMap = (HashMap<Integer, Integer>)genresMap.get(key);
+            }
+            else {
+                infoMap = new HashMap<Integer, Integer>();
+            }
+
+            infoMap.put(i, plays[i]);
+            genresMap.put(key, infoMap);
+
+            //재생수
+            if(playMap.containsKey(key)){
+                playMap.put(key, playMap.get(key) + plays[i]);
+            }
+            else {
+                playMap.put(key, plays[i]);
+            }
+        }
+
+        int mCnt = 0;
+        Iterator it = sortByValue(playMap).iterator();
+
+        while(it.hasNext()){
+            String key = (String)it.next();
+            Iterator indexIt = sortByValue((HashMap<Integer, Integer>)genresMap.get(key)).iterator();
+            int playsCnt = 0;
+
+            while(indexIt.hasNext()){
+                resultAL.add((int)indexIt.next());
+                mCnt++;
+                playsCnt++;
+                if(playsCnt > 1) break;
+            }
+        }
+
+        int[] answer = new int[resultAL.size()];
+
+        for(int i = 0; i < resultAL.size(); i++){
+            answer[i] = resultAL.get(i).intValue();
+        }
+
+        return answer;
+    }
+
+    private ArrayList sortByValue(final Map map){
+        ArrayList<Object> keyList = new ArrayList();
+        keyList.addAll(map.keySet());
+
+        Collections.sort(keyList, new Comparator(){
+            public int compare(Object o1, Object o2){
+                Object v1 = map.get(o1);
+                Object v2 = map.get(o2);
+
+                return ((Comparable) v2).compareTo(v1);
+            }
+        });
+
+        return keyList;
+    }
+}
+
+ */
