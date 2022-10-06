@@ -28,7 +28,121 @@ package heap;
     모든 음식의 스코빌 지수가 7 이상이 되었고 이때 섞은 횟수는 2회입니다.
  */
 
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+
+/*
+    힙을 이용한 우선순위 큐 만들기
+    //최소힙 (가장 작은 수로 느슨한 정렬(오름차순) -> 최상위 노드가 최소값이 되는 완전이진트리)
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
+    //최대힙 (가장 큰 수로 느슨한 정렬 (내림차순) -> 최상위 노드가 최대값이 되는 완전이진트리)
+    PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Comparator.reverseOrder());
+
+    heap.add(5);
+
+    우선순위 큐를 이용하여 꺼내오는 방법
+    while(!heap.isEmpty()){
+        heap.poll();
+    }
+    poll을 이용하게 되면 우선순위 큐를 사용하게 되고 값을 하나씩 꺼낼때마다 트리에서 정렬을 하게되어 순서대로 꺼내 올 수 있다
+    (poll은 queue방식으로 노드들을 반환하게 만들어준다)
+
+    힙을 이용해 꺼내오는 방법
+    for(int i : heap){
+        System.out.println(i);
+    }
+    배열을 통해 꺼내오게 되면 힙을 통해서만 꺼내오게 되기 때문에 느슨한 정렬(완전이진트리)로 값을 꺼내오게 된다 (완벽한 정렬이 되지 않는다)
+
+ */
+
+/*
+    문제분석
+    중요 예외처리 사항
+    1. 원하는 스코빌 지수가 0일경우도 존재한다
+    2. 원하는 스코빌 지수를 만들 수 없을 경우에는 -1을 리턴한다
+
+    모든 음식이 k 이상이 되도록 만드려면
+    1. 최소 힙을 이용하여 최상위 노드가 k보다 크게 만들고
+    2. 그렇게 될때까지의 섞은 횟수를 리턴하면 된다
+ */
+
+/*
+    문제 해결
+    Step0. k가 0일경우 예외처리
+    Step1. 최소힙을 만들어 scoville을 넣어준다
+
+    Step2. poll()을 통해 최상위 노드의 값을 꺼내고 k보다 높거나 같은지 확인한다
+    Step3. poll()을 이용하여 두번째 값을 빼주고 섞은 음식을 만든다
+    Step4. add()를 통해 섞은 음식을 다시 우선순위 큐에 넣는다
+
+    Step5. 2~5반복
+ */
 public class 더맵게 {
 
+    public int solution(int[] scoville, int K) {
 
+        int answer = 0;
+        int firstFood;
+        int secondFood;
+
+        //Step0. k가 0일경우 예외처리
+        if (K == 0) {
+            return answer;
+        }
+
+        //최소 힙 만들기
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
+        //Step1. 최소힙을 만들어 scoville을 넣어준다
+        for (int i = 0; i < scoville.length; i++) {
+            minHeap.add(scoville[i]);
+        }
+
+        //Step5. 2~5반복
+        while (minHeap.size() != 1) {
+            //Step2. poll()을 통해 최상위 노드의 값을 꺼내고 k보다 높거나 같은지 확인한다
+            firstFood = minHeap.poll();
+            if (firstFood >= K) {
+                return answer;
+            }
+
+            //Step3. poll()을 이용하여 두번째 값을 빼주고 섞은 음식을 만든다
+            secondFood = minHeap.poll();
+
+            //Step4. add()를 통해 섞은 음식을 다시 우선순위 큐에 넣는다
+            minHeap.add(firstFood + (secondFood * 2));
+            answer++;
+        }
+
+        if (minHeap.poll() >= K) {
+            return answer;
+        } else {
+            return -1;
+        }
+    }
 }
+
+/*
+    우선순위 큐에 대해서 이해를 했다면 어렵지 않은 문제였다
+    사실 우선수위 큐보단 최소, 최대값으로 정렬을 하는 힙(트리) 자료구조를 알고 활용하는 문제였다
+
+    우선순위 큐는 heap을 이용하여 만드는 방법이 있고, 이 heap은 이진트리를 이용해 만들어진다
+    heap은 최소값, 최대값을 최대노드로 가지며 느슨한 정렬이 되어 있는 자료구조이며
+    우선순위 큐는 이러한 heap을 이용해 poll을 이용하여 값을 꺼낼때 마다 완벽하게 정렬된값을 꺼내온다
+    즉, heap은 최소,최대값으로 느슨하게 정렬된 이진트리 그자체 이며
+    우선순위큐는 여기서 큐방식으로 값을 꺼내오되 꺼내오는게 기준이 선입선출이 아닌 heap의 최상위 노드를 꺼내오는 (기준이 최소 최대가되는)
+    방법이다
+
+    모든값을 넣은과 동시에 정렬하고 꺼낼때마다 이를 자동으로 최신화 해준다 (힙(트리)의 장점) 배열은 모두 정렬하기 때문에
+    하나의 값을 빼고 이를 다시 정렬할때에는 힙을 사용하는것이 좋은 방법인것같다
+
+    또한 최소힙이나 최대힙의 최상위 노드를 통해 하위 노드들은 해당값보다 무조건 작거나, 큰 것을 활용하여 조건문을 만들었다
+    가장 큰값, 가장작은 값에 대한 것을 알아낼때에도 리스트를 이용한 정렬보다 더 좋아보인다
+
+    1. 가장 큰값, 가장 작은값에 대한 것만을 알아내야할경우
+    2. 값을 하나씩 꺼낼때 정렬의 최신화 기능이 필요할경우
+    위의 두가지 경우에 있어서 힙, 우선순위큐를 사용하는것이 좋아보인다다
+ */
