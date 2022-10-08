@@ -64,7 +64,7 @@ public class k번째수 {
         //다른사람 풀이
         //Arrays.copyOfRange 메서드를 사용하여 간단하게 풀어낸 방법
         //Arrays.copyOfRange(복사할 배열, 복사할 배열의 시작인덱스, 복사할 배열의 마지막 인덱스)
-        
+
         int[] answer = new int[commands.length];
 
         for(int i=0; i<commands.length; i++){
