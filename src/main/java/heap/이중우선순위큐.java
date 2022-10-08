@@ -51,7 +51,6 @@ import java.util.Collections;
 import java.util.PriorityQueue;
 
 import static java.lang.Integer.max;
-import static java.lang.Integer.parseInt;
 
 /*
     코드 설계
@@ -64,13 +63,13 @@ import static java.lang.Integer.parseInt;
  */
 public class 이중우선순위큐 {
 
-    public int[] solution(String[] operations) {
+    /*public int[] solution(String[] operations) {
 
         int[] answer = new int[2];
         //Step2. 최소힙, 최대힙 모두 만들고 I인 경우 둘 모두 값을 넣어준다
-        PriorityQueue minHeap = new PriorityQueue();
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
         //최소대힙 우선순위큐 만드는법 Collections.reverseOrder() 추가
-        PriorityQueue maxHeap = new PriorityQueue(Collections.reverseOrder());
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
         String[] splitedOperation;
         int operand;
         String instruction;
@@ -80,16 +79,16 @@ public class 이중우선순위큐 {
         for (String operation : operations) {
             splitedOperation = operation.split(" ");
             instruction = splitedOperation[0];
-            operand = parseInt(splitedOperation[1]);
+            operand = Integer.parseInt(splitedOperation[1]);
             if (instruction.equals("I")) {
                 minHeap.offer(operand);
                 maxHeap.offer(operand);
             } else if (instruction.equals("D") && !maxHeap.isEmpty()) {
                 if (operand == 1) {
-                    maxNumber = (Integer) maxHeap.poll();
+                    maxNumber = maxHeap.poll();
                     minHeap.remove(maxNumber);
                 } else {
-                    minNumber = (Integer) minHeap.poll();
+                    minNumber = minHeap.poll();
                     maxHeap.remove(minNumber);
                 }
             }
@@ -99,10 +98,103 @@ public class 이중우선순위큐 {
             answer[0] = 0;
             answer[1] = 0;
         } else {
-            answer[0] = (int)maxHeap.poll();
-            answer[1] = (int)minHeap.poll();
+            answer[0] = maxHeap.poll();
+            answer[1] = minHeap.poll();
         }
 
         return answer;
+    }*/
+
+    //다른사람 풀이
+    public int[] solution(String[] arguments) {
+        MidV q = new MidV();
+
+        for(int i = 0; i < arguments.length; i++){
+            String[] commend = arguments[i].split(" ");
+
+            int v = Integer.parseInt(commend[1]);
+            if(commend[0].equals("I")){
+                q.push(v);
+            }else{
+                switch (v){
+                    case 1 : q.removeMax();
+                        break;
+                    case -1: q.removeMin();
+                        break;
+                }
+            }
+        }
+
+
+        int[] aw = new int[]{q.getMaxValue(),q.getMinValue()};
+
+        return aw;
     }
+}
+
+class MidV{
+    private PriorityQueue<Integer> leftHeap;
+    private PriorityQueue<Integer> rightHeap;
+
+    public MidV(){
+        leftHeap = new PriorityQueue<>(10,Collections.reverseOrder());//최대값;
+        rightHeap = new PriorityQueue<>();//최소값
+    }
+
+
+    public void push(int v){
+        leftHeap.add(v);
+    }
+
+    public void removeMax(){
+
+        while(!rightHeap.isEmpty()){
+            leftHeap.add(rightHeap.poll());
+        }
+
+        leftHeap.poll();
+    }
+
+    public void removeMin(){
+
+        while(!leftHeap.isEmpty()){
+            rightHeap.add(leftHeap.poll());
+        }
+
+        rightHeap.poll();
+    }
+
+    public int getMaxValue(){
+
+        if(leftHeap.size() == 0 && rightHeap.size() == 0)
+            return 0;
+
+        while(!rightHeap.isEmpty()){
+            leftHeap.add(rightHeap.poll());
+        }
+
+        return leftHeap.peek();
+    }
+
+    public int getMinValue(){
+
+        if(leftHeap.size() == 0 && rightHeap.size() == 0)
+            return 0;
+
+        while(!leftHeap.isEmpty()){
+            rightHeap.add(leftHeap.poll());
+        }
+
+        return rightHeap.peek();
+    }
+    /*
+        문제가 쉬워서 금방 풀었지만 다른 사람 풀이 중 이 코드를 보고 반성하게 되었다
+        이 문제를 풀면서 어떻게하면 C언어의 알고리즘 풀이와 같은 문제풀이법에서 벗어날 수 있을지 고민했었는데
+        방법을 찾지 못해 하드코딩으로 문제를 풀었다
+
+        하지만 이 문제풀이를 보면 완벽하다 이중우선순위큐 객체 자체를 만들었고
+        여기서 각각의 동작들에 대한 메서드를 만듦으로써 완벽한 객체지향을 이루었다
+
+        따라할 수 있을지는 모르겠지만 정말 많이 배웠다 좀 더 노력해봐야겠다
+     */
 }

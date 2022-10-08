@@ -16,7 +16,7 @@ class 이중우선순위큐Test {
     @DisplayName("이중우선순위큐 문제 테스트")
     @ParameterizedTest(name = "{index}: {0}")
     @MethodSource("StringArrayProvider")
-    void solutionTest(String message, String[] operations, int expected) {
+    void solutionTest(String message, String[] operations, int[] expected) {
         assertThat(test.solution(operations)).isEqualTo(expected);
     }
 
@@ -27,7 +27,10 @@ class 이중우선순위큐Test {
                         (Object) new int[] {0, 0}),
                 Arguments.of("테스트2번",
                         (Object) new String[] {"I -45", "I 653", "D 1", "I -642", "I 45", "I 97", "D 1", "D -1", "I 333"},
-                        (Object) new int[] {333, -45})
+                        (Object) new int[] {333, -45}),
+                Arguments.of("테스트2번",
+                        (Object) new String[] {"I 1", "I 2", "I 3", "I 4", "I 5", "D -1", "D -1","D -1", "D -1"},
+                        (Object) new int[] {5, 5})
         );
 
     }
