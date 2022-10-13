@@ -48,17 +48,17 @@ import java.util.Arrays;
  */
 public class H_Index {
 
-    /*public int solution(int[] citations) {
+    public int solution(int[] citations) {
 
         //Step1. Arrays.sort를 이용해 오름차순(default)로 정렬
         Arrays.sort(citations);
         int h;
         int n = citations.length;
         int minIndex;
-        *//*
+        /*
             h 이상인 값이 h개 이상인 h값을 찾아라
             h는 h개 이상이어야 하기 때문에 h = n 부터 h-- 해가면서 조건에 맞는 값을 찾는다
-         *//*
+        */
         for (h = n; h > 0; h--) {
             //Step2. 배열의 뒤에서부터 h 이상인 값이 몇개인지 구한다
             minIndex = findMinIndex(citations, h, n);
@@ -70,19 +70,6 @@ public class H_Index {
         }
 
         return 0;
-    }*/
-
-    public int solution(int[] citations) {
-        Arrays.sort(citations);
-        int number = 0;
-        for (int i = 0; i < citations.length; i++) {
-            if (citations[i] >= citations.length - i) {
-                number = i;
-                break;
-            }
-        }
-
-        return number
     }
 
     private int findMinIndex(int[] citations, int h, int n) {
