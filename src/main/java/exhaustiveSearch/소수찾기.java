@@ -1,5 +1,8 @@
 package exhaustiveSearch;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
     소수 찾기
     문제 설명
@@ -25,10 +28,72 @@ package exhaustiveSearch;
     11과 011은 같은 숫자로 취급합니다.
 
  */
+
+//02-12 순열 알고리즘 공부하고 다시 풀기
 public class 소수찾기 {
 
     public int solution(String numbers) {
         int answer = 0;
         return answer;
+    }
+
+    List combineNumber(String numbers) {
+
+        List combinationNumbers = new ArrayList();
+        //List integerNumbers = stringToIntegerNumbers(numbers);
+        StringBuilder sb = new StringBuilder();
+
+        for (int digitNumber = 1; digitNumber <= numbers.length(); digitNumber++) {
+
+            if (digitNumber == 1) {
+                for (int index = 0; index < numbers.length(); index++) {
+                    combinationNumbers.add(String.valueOf(numbers.charAt(index)));
+                }
+            } else if (digitNumber == 2) {
+                for (int firstIndex = 0; firstIndex < numbers.length(); firstIndex++) {
+                    for (int secondIndex = 0; secondIndex < numbers.length(); secondIndex++) {
+                        if (firstIndex == secondIndex) {
+                            continue;
+                        }
+                        sb.setLength(0);
+                        sb.append(numbers.charAt(firstIndex));
+                        sb.append(numbers.charAt(secondIndex));
+                        combinationNumbers.add(sb.toString());
+                    }
+                }
+            } else if (digitNumber == 3) {
+
+            }
+        }
+        return combinationNumbers;
+    }
+
+    public List stringToIntegerNumbers(String numbers) {
+
+        List integerNumbers = new ArrayList();
+
+        for (int index = 0; index < numbers.length(); index++) {
+            integerNumbers.add(numbers.charAt(index));
+        }
+
+        return integerNumbers;
+    }
+
+    boolean isPrimeNumber(int number) {
+
+        boolean checkResult = true;
+
+        if (number == 1) {
+            return false;
+        }
+
+        for (int primeNumber = 2; primeNumber < number; primeNumber++) {
+            if (number % primeNumber == 0) {
+                checkResult = false;
+                break;
+            }
+        }
+
+        return checkResult;
     }
 }
