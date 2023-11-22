@@ -10,3 +10,5 @@
 build
 .gradle
 /build/
+src/test/java/test/SimpleTest.java
+src/test/java/test/SimpleTest.java
